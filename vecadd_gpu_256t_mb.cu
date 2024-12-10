@@ -14,7 +14,7 @@ void add(int n, float *x, float *y)
 int main(void)
 {
   int N = 1<<29; // 512M elements
-
+  int blockSize = 256; // 256 threads per block
   float *x = new float[N];
   float *y = new float[N];
 
@@ -29,8 +29,10 @@ int main(void)
     x[i] = 1.0f;
     y[i] = 2.0f;
   }
-
+   int numBlocks = (N + blockSize - 1) / blockSize;
+  
   // Run kernel on 1M elements on the CPU
+  // I could change the 256 to blocksize but I like it as a number
   add<<<1, 256>>>(N, x, y);
 
     // Wait for GPU to finish before accessing on host
@@ -41,6 +43,7 @@ int main(void)
   for (int i = 0; i < N; i++)
     maxError = fmax(maxError, fabs(y[i]-3.0f));
   std::cout << "Max error: " << maxError << std::endl;
+  std::cout << "Thread blocks:" << numBlocks << std::endl;
 
   // Free memory
   cudaFree(x);
