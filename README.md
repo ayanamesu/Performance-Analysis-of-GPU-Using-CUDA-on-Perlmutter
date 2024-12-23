@@ -1,0 +1,1 @@
+This is a project I did for Computer Organization, where I wrote CUDA code to test GPU performance on Perlmutter. I recorded computational run times, comparing results from a CPU node to various GPU configurations, including 1 block, 256 threads per block, 256 blocks, and 256-prefetch
